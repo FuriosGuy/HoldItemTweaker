@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "helditemtweaker",
+  "version": "${version}",
+  "name": "Held Item Tweaker",
+  "description": "Edit supported enchantments and duplicate the item in your hand.",
+  "authors": ["Codex"],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["dev.codex.helditemtweaker.HeldItemTweaker"],
+    "client": ["dev.codex.helditemtweaker.HeldItemTweakerClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.18.2",
+    "fabric-api": "*",
+    "minecraft": "1.21.11"
+  }
+}
+
