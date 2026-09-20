@@ -1,0 +1,20 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.codex.helditemtweaker.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ItemStackMixin",
+    "ItemUtilsMixin",
+    "ProjectileWeaponItemMixin",
+    "BucketItemMixin",
+    "LivingEntityMixin",
+    "ResultSlotMixin"
+  ],
+  "client": [
+    "AbstractContainerScreenAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

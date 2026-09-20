@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "id": "helditemtweaker",
-  "version": "${version}",
-  "name": "Universal Tweaker",
-  "description": "A unified editor for item components, inventory targets, variants, effects, and player tools.",
+  "version": "1.0.0",
+  "name": "Item Tweaker",
+  "description": "Edit supported components on items and duplicate items.",
   "authors": ["Codex"],
   "license": "MIT",
   "environment": "*",

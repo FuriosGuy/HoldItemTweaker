@@ -1,9 +1,9 @@
 {
-  "key.helditemtweaker.open": "Open held item editor",
-  "key.helditemtweaker.duplicate": "Duplicate held item",
-  "key.categories.helditemtweaker": "Held Item Tweaker",
-  "helditemtweaker.keys": "Held Item Tweaker",
-  "helditemtweaker.title": "Held Item Tweaker",
+  "key.helditemtweaker.open": "Open Universal Tweaker",
+  "key.helditemtweaker.duplicate": "Duplicate item in hand",
+  "key.categories.helditemtweaker": "Universal Tweaker",
+  "helditemtweaker.keys": "Universal Tweaker",
+  "helditemtweaker.title": "Universal Tweaker",
   "helditemtweaker.tab.general": "General",
   "helditemtweaker.tab.enchantments": "Enchants",
   "helditemtweaker.tab.visuals": "Visuals",
@@ -14,7 +14,7 @@
   "helditemtweaker.damage_hint": "Durability damage (0 = full durability)",
   "helditemtweaker.lore": "Lore",
   "helditemtweaker.lore_hint": "Lore lines separated by |",
-  "helditemtweaker.no_item": "Hold an item first.",
+  "helditemtweaker.no_item": "No item selected.",
   "helditemtweaker.no_enchantments": "No supported enchantments for this item.",
   "helditemtweaker.apply": "Apply",
   "helditemtweaker.clear": "Clear All",
@@ -22,6 +22,11 @@
   "helditemtweaker.level": "Level",
   "helditemtweaker.level_range": "Level %s-%s",
   "helditemtweaker.invalid": "Invalid level",
+  "helditemtweaker.infinite_use": "Infinite item use",
   "helditemtweaker.applied": "Applied!",
-  "helditemtweaker.duplicate_failed": "Could not duplicate held item"
+  "helditemtweaker.duplicate_failed": "Could not duplicate item",
+  "helditemtweaker.delete": "Delete",
+  "helditemtweaker.variant.title": "Universal Tweaker - Item Variants",
+  "helditemtweaker.variant.search": "Search related items",
+  "helditemtweaker.variant.apply": "Apply variant"
 }

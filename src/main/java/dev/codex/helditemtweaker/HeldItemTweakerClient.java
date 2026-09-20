@@ -7,10 +7,15 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.entity.EquipmentSlot;
 import org.lwjgl.glfw.GLFW;
+
+import dev.codex.helditemtweaker.mixin.AbstractContainerScreenAccessor;
 
 public final class HeldItemTweakerClient implements ClientModInitializer {
     private static KeyMapping openKey;
@@ -34,17 +39,57 @@ public final class HeldItemTweakerClient implements ClientModInitializer {
     }
 
     private static void open(Minecraft client) {
-        if (client.player == null || client.screen != null || client.player.getMainHandItem().isEmpty()) {
-            if (client.player != null && client.player.getMainHandItem().isEmpty()) {
-                client.player.displayClientMessage(Component.literal("Hold an item first."), true);
-            }
-            return;
-        }
-        client.setScreen(new HeldItemScreen());
+        if (client.player == null || client.screen != null) return;
+        String target = firstNonEmptyTarget(client);
+        client.setScreen(new HeldItemScreen(target == null ? HeldItemTweaker.TARGET_MAIN_HAND : target));
     }
 
     private static void duplicate(Minecraft client) {
-        if (client.player == null || client.screen != null || client.player.getMainHandItem().isEmpty()) return;
-        ClientPlayNetworking.send(new HeldItemTweaker.DuplicatePayload());
+        if (client.player == null) return;
+        String target = duplicateTarget(client);
+        if (target == null) return;
+        ClientPlayNetworking.send(new HeldItemTweaker.DuplicatePayload(target));
+    }
+
+    private static String duplicateTarget(Minecraft client) {
+        if (!client.player.containerMenu.getCarried().isEmpty()) {
+            return HeldItemTweaker.TARGET_CURSOR;
+        }
+
+        if (client.screen instanceof InventoryScreen inventoryScreen
+                && client.player.containerMenu instanceof InventoryMenu) {
+            Slot slot = ((AbstractContainerScreenAccessor) inventoryScreen).helditemtweaker$getHoveredSlot();
+            if (slot != null && slot.container == client.player.getInventory() && !slot.getItem().isEmpty()) {
+                return HeldItemTweaker.inventoryTarget(slot.getContainerSlot());
+            }
+        }
+
+        if (client.screen == null && !client.player.getMainHandItem().isEmpty()) {
+            return HeldItemTweaker.TARGET_MAIN_HAND;
+        }
+        return null;
+    }
+
+    private static String firstNonEmptyTarget(Minecraft client) {
+        if (!client.player.getMainHandItem().isEmpty()) return HeldItemTweaker.TARGET_MAIN_HAND;
+        if (!client.player.getOffhandItem().isEmpty()) return HeldItemTweaker.TARGET_OFF_HAND;
+        for (EquipmentSlot slot : new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST,
+                EquipmentSlot.LEGS, EquipmentSlot.FEET}) {
+            if (!client.player.getItemBySlot(slot).isEmpty()) {
+                return switch (slot) {
+                    case HEAD -> HeldItemTweaker.TARGET_ARMOR_HEAD;
+                    case CHEST -> HeldItemTweaker.TARGET_ARMOR_CHEST;
+                    case LEGS -> HeldItemTweaker.TARGET_ARMOR_LEGS;
+                    case FEET -> HeldItemTweaker.TARGET_ARMOR_FEET;
+                    default -> null;
+                };
+            }
+        }
+        int selected = client.player.getInventory().getSelectedSlot();
+        for (int index = 0; index < net.minecraft.world.entity.player.Inventory.INVENTORY_SIZE; index++) {
+            if (index == selected || client.player.getInventory().getItem(index).isEmpty()) continue;
+            return HeldItemTweaker.inventoryTarget(index);
+        }
+        return TrinketsCompat.list(client.player).stream().findFirst().map(TrinketsCompat.Slot::id).orElse(null);
     }
 }
